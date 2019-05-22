@@ -115,11 +115,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ChessApp.h" />
     <ClInclude Include="DirectXApplication.h" />
+    <ClInclude Include="Sprite.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ChessApp.cpp" />
     <ClCompile Include="DirectXApplication.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

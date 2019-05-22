@@ -1,9 +1,9 @@
-#include "DirectXApplication.h"
+#include "ChessApp.h"
 
 int WINAPI WinMain(HINSTANCE instance, HINSTANCE prev_instace, LPSTR cmd_line, int show_cmd)
 {
 	try {
-		DirectXApplication d(instance);
+		ChessApp d(instance);
 		d.Run();
 	}
 	catch (HRESULT h)
