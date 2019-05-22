@@ -3,6 +3,7 @@
 #include "Sprite.h"
 #include "SpriteBatch.h"
 #include <SpriteFont.h>
+#include "Object.h"
 
 class ChessApp : DirectXApplication
 {
@@ -18,6 +19,8 @@ private:
 
 	DirectX::SpriteBatch* sprite_batch;
 	DirectX::SpriteFont* sprite_font;
+	Graphics::Sprite *a;
+	Object *b;
 
 	void Update(float delta_time);
 	void Render(float delta_time);
