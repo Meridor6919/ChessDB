@@ -28,8 +28,8 @@ bool Object::Update(DirectX::Mouse::ButtonStateTracker * mouse_info, DirectX::Mo
 	}
 	else if (draging)
 	{
-		sprite->SetX(mouse->GetState().x);
-		sprite->SetY(mouse->GetState().y);
+		sprite->SetX(mouse->GetState().x - sprite->GetWidth()/2);
+		sprite->SetY(mouse->GetState().y - sprite->GetHeight()/2);
 	}
 	return false;
 }

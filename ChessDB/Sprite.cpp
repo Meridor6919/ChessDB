@@ -11,7 +11,7 @@ Graphics::Sprite::Sprite(DirectX::SpriteBatch* sprite_batch, RECT source, LONG p
 	this->width = width;
 	this->height = height;
 	//orgin will be at the middle of the sprite to allow rotation around its own axis
-	this->orgin = { static_cast<float>(source.right) / 2.0f, static_cast<float>(source.bottom) / 2.0f };
+	this->orgin = { static_cast<float>(source.right-source.left) / 2.0f, static_cast<float>(source.bottom-source.top) / 2.0f };
 	this->effect = DirectX::SpriteEffects::SpriteEffects_None;
 }
 ID3D11ShaderResourceView * Graphics::Sprite::AddTexture(const wchar_t * file_name, ID3D11Device * device)

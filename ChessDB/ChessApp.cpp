@@ -9,8 +9,9 @@ ChessApp::ChessApp(HINSTANCE instance) : DirectXApplication(instance)
 	mouse->SetWindow(hwnd);
 	mouse_tracker = new DirectX::Mouse::ButtonStateTracker();
 
-	a = new Graphics::Sprite(sprite_batch, { 0,0,60,60 }, 400, 100, 120, 120, 0.1);
+	a = new Graphics::Sprite(sprite_batch, { 340*0/6,60,340 * 1 / 6,120 }, 400, 100, 60, 60, 0.1);
 	a->AddTexture(L"figures.png", device);
+	
 	b = new Object(a, true);
 }
 
