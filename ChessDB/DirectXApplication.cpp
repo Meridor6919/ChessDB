@@ -16,7 +16,7 @@ DirectXApplication::DirectXApplication(HINSTANCE instance)
 	wc.lpfnWndProc = this->DefaultMsgProc;
 	wc.hInstance = instance;
 	wc.hCursor = LoadCursor(0, IDC_ARROW);
-	wc.lpszMenuName = MAKEINTRESOURCE(IDC_WINDOWSPROJECT1);
+	wc.lpszMenuName = MAKEINTRESOURCE(RC_TOOLBAR);
 	wc.lpszClassName = "xd";
 
 	if (!Init())
@@ -63,6 +63,65 @@ LRESULT CALLBACK DirectXApplication::DefaultMsgProc(HWND hwnd, UINT msg, WPARAM 
 
 	switch (msg)
 	{
+	case WM_COMMAND:
+	{
+		int id = LOWORD(wparam);
+		// Parse the menu selections:
+		switch (id)
+		{
+		case RC_NEWGAME_PLAYER:
+		{
+			MessageBox(0, "RC_NEWGAME_PLAYER", "", 0);
+			break;
+		}
+		case RC_NEWGAME_AI:
+		{
+			MessageBox(0, "RC_NEWGAME_AI", "", 0);
+			break;
+		}
+		case RC_SAVEGAME:
+		{
+			MessageBox(0, "RC_SAVEGAME", "", 0);
+			break;
+		}
+		case RC_GAMES:
+		{
+			MessageBox(0, "RC_GAMES", "", 0);
+			break;
+		}
+		case RC_PLAYERS:
+		{
+			MessageBox(0, "RC_PLAYERS", "", 0);
+			break;
+		}
+		case RC_CHESSBOARD_COLOR:
+		{
+			MessageBox(0, "RC_CHESSBOARD_COLOR", "", 0);
+			break;
+		}
+		case RC_INTERFACE_COLOR:
+		{
+			MessageBox(0, "RC_INTERFACE_COLOR", "", 0);
+			break;
+		}
+		case RC_FULLSCREEN:
+		{
+			MessageBox(0, "RC_FULLSCREEN", "", 0);
+			break;
+		}
+		case RC_GENERAL:
+		{
+			MessageBox(0, "RC_GENERAL", "", 0);
+			break;
+		}
+		case RC_PIECES:
+		{
+			MessageBox(0, "RC_PIECES", "", 0);
+			break;
+		}
+		}
+		break;
+	}
 	case WM_DESTROY:
 	{
 		PostQuitMessage(0);

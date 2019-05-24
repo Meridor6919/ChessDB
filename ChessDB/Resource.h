@@ -4,20 +4,18 @@
 
 // Next default values for new objects
 // 
-#define IDS_APP_TITLE			103
 
-#define IDR_MAINFRAME			128
-#define IDD_WINDOWSPROJECT1_DIALOG	102
-#define IDD_ABOUTBOX			103
-#define IDM_ABOUT				104
-#define IDM_EXIT				105
-#define IDI_WINDOWSPROJECT1			107
-#define IDI_SMALL				108
-#define IDC_WINDOWSPROJECT1			109
-#define IDC_MYICON				2
-#ifndef IDC_STATIC
-#define IDC_STATIC				-1
-#endif
+#define RC_TOOLBAR 100
+#define RC_NEWGAME_PLAYER 110
+#define RC_NEWGAME_AI 111
+#define RC_SAVEGAME 112
+#define RC_GAMES 113
+#define RC_PLAYERS 114
+#define RC_CHESSBOARD_COLOR 115
+#define RC_INTERFACE_COLOR 116
+#define RC_FULLSCREEN 117
+#define RC_GENERAL 118
+#define RC_PIECES 119
 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
