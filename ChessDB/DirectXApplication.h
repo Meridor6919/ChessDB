@@ -10,6 +10,7 @@
 #include <Keyboard.h>
 #include <Mouse.h>
 #include <time.h>
+#include "Resource.h"
 
 class DirectXApplication {
 

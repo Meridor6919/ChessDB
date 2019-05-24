@@ -16,6 +16,7 @@ DirectXApplication::DirectXApplication(HINSTANCE instance)
 	wc.lpfnWndProc = this->DefaultMsgProc;
 	wc.hInstance = instance;
 	wc.hCursor = LoadCursor(0, IDC_ARROW);
+	wc.lpszMenuName = MAKEINTRESOURCE(IDC_WINDOWSPROJECT1);
 	wc.lpszClassName = "xd";
 
 	if (!Init())
