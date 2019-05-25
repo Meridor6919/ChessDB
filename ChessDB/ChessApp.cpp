@@ -36,7 +36,7 @@ ChessApp::ChessApp(HINSTANCE instance) : DirectXApplication(instance)
 	}
 	for (int i = 0; i < 3; i++)
 	{
-		a = new Graphics::Sprite(sprite_batch, { 340 * i / 6,0,340 * (i + 1) / 6,60 }, 100 + (5+i) * 60, 100, 60, 60, 0.1);
+		a = new Graphics::Sprite(sprite_batch, { 340 * (2-i) / 6,0,340 * (-i + 3) / 6,60 }, 100 + (5+i) * 60, 100, 60, 60, 0.1);
 		a->AddTexture(L"figures.png", device);
 		b.push_back(new Object(a, true));
 	}
@@ -54,7 +54,7 @@ ChessApp::ChessApp(HINSTANCE instance) : DirectXApplication(instance)
 	}
 	for (int i = 0; i < 3; i++)
 	{
-		a = new Graphics::Sprite(sprite_batch, { 340 * i / 6,60,340 * (i + 1) / 6,120 }, 100 + (5 + i) * 60, 520, 60, 60, 0.1);
+		a = new Graphics::Sprite(sprite_batch, { 340 * (2-i) / 6,60,340 * (-i + 3) / 6,120 }, 100 + (5 + i) * 60, 520, 60, 60, 0.1);
 		a->AddTexture(L"figures.png", device);
 		b.push_back(new Object(a, true));
 	}
