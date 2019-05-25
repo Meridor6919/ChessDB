@@ -4,6 +4,10 @@
 #include "SpriteBatch.h"
 #include <SpriteFont.h>
 #include "Object.h"
+#include "PrimitiveBatch.h"
+#include "VertexTypes.h"
+#include "CommonStates.h"
+#include "Effects.h"
 
 class ChessApp : DirectXApplication
 {
@@ -18,6 +22,10 @@ private:
 	DirectX::Mouse::ButtonStateTracker* mouse_tracker;
 
 	DirectX::SpriteBatch* sprite_batch;
+	DirectX::PrimitiveBatch<DirectX::VertexPositionColor >* primitive_batch;
+	DirectX::CommonStates* m_states;
+	DirectX::BasicEffect* m_effect;
+	ID3D11InputLayout* m_inputLayout;
 	DirectX::SpriteFont* sprite_font;
 	Graphics::Sprite *a;
 	Object *b;
