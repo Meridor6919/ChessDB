@@ -19,11 +19,13 @@ bool Object::Update(DirectX::Mouse::ButtonStateTracker * mouse_info, DirectX::Mo
 	{
 		draging = true;
 		s_draging = true;
+		sprite->SetDepth(sprite->GetDepth() * 2);
 	}
 	else if (draging && mouse_info->leftButton == 2)
 	{
 		draging = false;
 		s_draging = false;
+		sprite->SetDepth(sprite->GetDepth() / 2);
 		return true;
 	}
 	else if (draging)
