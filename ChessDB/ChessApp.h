@@ -8,6 +8,9 @@
 #include "VertexTypes.h"
 #include "CommonStates.h"
 #include "Effects.h"
+#include <fstream>
+#include <map>
+#include "Piece_type.h"
 
 class ChessApp : DirectXApplication
 {
@@ -32,5 +35,6 @@ private:
 
 	void Update(float delta_time);
 	void Render(float delta_time);
+	void LoadStartingPosition();
 };
 

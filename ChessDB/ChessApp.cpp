@@ -23,47 +23,11 @@ ChessApp::ChessApp(HINSTANCE instance) : DirectXApplication(instance)
 
 	sprite_batch = new DirectX::SpriteBatch(device_context);
 	primitive_batch = new DirectX::PrimitiveBatch<DirectX::VertexPositionColor>(device_context);
-	sprite_font = new DirectX::SpriteFont(device, L"myfile.spritefont", false);
+	sprite_font = new DirectX::SpriteFont(device, L"graphics\\myfile.spritefont", false);
 	mouse = new DirectX::Mouse();
 	mouse->SetWindow(hwnd);
 	mouse_tracker = new DirectX::Mouse::ButtonStateTracker();
-
-	for (int i = 0; i < 5; i++)
-	{
-		a = new Graphics::Sprite(sprite_batch, { 340 * i / 6,0,340 * (i+1) / 6,60 }, 100+i*60, 100, 60, 60, 0.1);
-		a->AddTexture(L"figures.png", device);
-		b.push_back(new Object(a, true));
-	}
-	for (int i = 0; i < 3; i++)
-	{
-		a = new Graphics::Sprite(sprite_batch, { 340 * (2-i) / 6,0,340 * (-i + 3) / 6,60 }, 100 + (5+i) * 60, 100, 60, 60, 0.1);
-		a->AddTexture(L"figures.png", device);
-		b.push_back(new Object(a, true));
-	}
-	for (int i = 0; i < 8; i++)
-	{
-		a = new Graphics::Sprite(sprite_batch, { 340 * 5 / 6,0,340 * 6 / 6,60 }, 100 + i * 60, 160, 60, 60, 0.1);
-		a->AddTexture(L"figures.png", device);
-		b.push_back(new Object(a, true));
-	}
-	for (int i = 0; i < 5; i++)
-	{
-		a = new Graphics::Sprite(sprite_batch, { 340 * i / 6,60,340 * (i + 1) / 6,120 }, 100 + i * 60, 520, 60, 60, 0.1);
-		a->AddTexture(L"figures.png", device);
-		b.push_back(new Object(a, true));
-	}
-	for (int i = 0; i < 3; i++)
-	{
-		a = new Graphics::Sprite(sprite_batch, { 340 * (2-i) / 6,60,340 * (-i + 3) / 6,120 }, 100 + (5 + i) * 60, 520, 60, 60, 0.1);
-		a->AddTexture(L"figures.png", device);
-		b.push_back(new Object(a, true));
-	}
-	for (int i = 0; i < 8; i++)
-	{
-		a = new Graphics::Sprite(sprite_batch, { 340 * 5 / 6,60,340 * 6 / 6,120 }, 100 + i * 60, 460, 60, 60, 0.1);
-		a->AddTexture(L"figures.png", device);
-		b.push_back(new Object(a, true));
-	}
+	LoadStartingPosition();
 }
 
 int ChessApp::Run()
@@ -87,7 +51,7 @@ void ChessApp::Render(float delta_time)
 	device_context->IASetInputLayout(m_inputLayout);
 
 	DirectX::XMFLOAT4 colors[2] = { { 0.7529, 0.7529, 0.7529, 1 }, { 1, 0.9215, 0.8039, 1 } };
-	bool current_color = true;
+	bool current_color = false;
 	DirectX::XMFLOAT3 v1(100.0f, 100.0f, 1.0f);
 	DirectX::XMFLOAT3 v2(160.0f, 100.0f, 1.0f);
 	DirectX::XMFLOAT3 v3(160.0, 160.0, 1.0f);
@@ -130,4 +94,76 @@ void ChessApp::Render(float delta_time)
 	swap_chain->Present(0, 0);
 	
 	
+}
+
+void ChessApp::LoadStartingPosition()
+{
+	std::fstream fvar;
+	std::map<int, Piece_type> piece_types;
+	std::string line;
+	std::string buffer[13];
+	int index = 0;
+	fvar.open("settings\\types_of_pieces.csv", std::ios::in);
+	std::getline(fvar, line);
+
+	//getting types of pieces
+	while (std::getline(fvar, line))
+	{
+		for (int j = 0; j < line.size(); j++)
+		{
+			if (line[j] == '\t')
+				index++;
+			else if (index >= 13)
+				break;
+			else
+				buffer[index] += line[j];
+		}
+
+		piece_types.insert(std::make_pair(atoi(buffer[0].c_str()), Piece_type(atoi(buffer[0].c_str()), buffer[2], buffer[3], buffer[4],
+			{ atoi(buffer[5].c_str()),atoi(buffer[6].c_str()),atoi(buffer[7].c_str()),atoi(buffer[8].c_str()) },
+			{ atoi(buffer[9].c_str()),atoi(buffer[10].c_str()),atoi(buffer[11].c_str()),atoi(buffer[12].c_str()) })));
+		for (int j = 0; j < 13; j++)
+			buffer[j] = "";
+		index = 0;
+	}
+	fvar.close();
+
+	//loading pieces
+	fvar.open("settings\\starting_pos.csv", std::ios::in);
+	std::getline(fvar, line);
+
+	while (std::getline(fvar, line))
+	{
+		for (int j = 0; j < line.size(); j++)
+		{
+			if (line[j] == '\t')
+				index++;
+			else if (index >= 4)
+				break;
+			else
+				buffer[index] += line[j];
+		}
+
+		RECT rect;
+		if (atoi(buffer[3].c_str()))
+		{
+			rect = piece_types.at(atoi(buffer[2].c_str())).white;
+		}
+		else
+		{
+			rect = piece_types.at(atoi(buffer[2].c_str())).black;
+		}
+
+		a = new Graphics::Sprite(sprite_batch, { rect.left,rect.top,rect.left + rect.right,rect.top + rect.bottom }, 100 + (8 - atoi(buffer[0].c_str())) * 60, 100 + (atoi(buffer[1].c_str())-1) * 60, 60, 60, 0.1);
+
+		line = "graphics\\" + piece_types.at(atoi(buffer[2].c_str())).image_path;
+		a->AddTexture(std::wstring(line.begin(), line.end()).c_str(), device);
+		b.push_back(new Object(a, true));
+	
+
+		for (int j = 0; j < 4; j++)
+			buffer[j] = "";
+		index = 0;
+	}
+	fvar.close();
 }
