@@ -28,7 +28,7 @@ private:
 	ID3D11InputLayout* m_inputLayout;
 	DirectX::SpriteFont* sprite_font;
 	Graphics::Sprite *a;
-	Object *b;
+	std::vector< Object*> b;
 
 	void Update(float delta_time);
 	void Render(float delta_time);

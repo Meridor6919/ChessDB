@@ -28,10 +28,42 @@ ChessApp::ChessApp(HINSTANCE instance) : DirectXApplication(instance)
 	mouse->SetWindow(hwnd);
 	mouse_tracker = new DirectX::Mouse::ButtonStateTracker();
 
-	a = new Graphics::Sprite(sprite_batch, { 340*0/6,60,340 * 1 / 6,120 }, 400, 100, 60, 60, 0.1);
-	a->AddTexture(L"figures.png", device);
-	
-	b = new Object(a, true);
+	for (int i = 0; i < 5; i++)
+	{
+		a = new Graphics::Sprite(sprite_batch, { 340 * i / 6,0,340 * (i+1) / 6,60 }, 100+i*60, 100, 60, 60, 0.1);
+		a->AddTexture(L"figures.png", device);
+		b.push_back(new Object(a, true));
+	}
+	for (int i = 0; i < 3; i++)
+	{
+		a = new Graphics::Sprite(sprite_batch, { 340 * i / 6,0,340 * (i + 1) / 6,60 }, 100 + (5+i) * 60, 100, 60, 60, 0.1);
+		a->AddTexture(L"figures.png", device);
+		b.push_back(new Object(a, true));
+	}
+	for (int i = 0; i < 8; i++)
+	{
+		a = new Graphics::Sprite(sprite_batch, { 340 * 5 / 6,0,340 * 6 / 6,60 }, 100 + i * 60, 160, 60, 60, 0.1);
+		a->AddTexture(L"figures.png", device);
+		b.push_back(new Object(a, true));
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		a = new Graphics::Sprite(sprite_batch, { 340 * i / 6,60,340 * (i + 1) / 6,120 }, 100 + i * 60, 520, 60, 60, 0.1);
+		a->AddTexture(L"figures.png", device);
+		b.push_back(new Object(a, true));
+	}
+	for (int i = 0; i < 3; i++)
+	{
+		a = new Graphics::Sprite(sprite_batch, { 340 * i / 6,60,340 * (i + 1) / 6,120 }, 100 + (5 + i) * 60, 520, 60, 60, 0.1);
+		a->AddTexture(L"figures.png", device);
+		b.push_back(new Object(a, true));
+	}
+	for (int i = 0; i < 8; i++)
+	{
+		a = new Graphics::Sprite(sprite_batch, { 340 * 5 / 6,60,340 * 6 / 6,120 }, 100 + i * 60, 460, 60, 60, 0.1);
+		a->AddTexture(L"figures.png", device);
+		b.push_back(new Object(a, true));
+	}
 }
 
 int ChessApp::Run()
@@ -42,28 +74,26 @@ int ChessApp::Run()
 void ChessApp::Update(float delta_time)
 {
 	mouse_tracker->Update(mouse->GetState());
-	b->Update(mouse_tracker, mouse);
+	for (int i = 0; i < b.size(); i++)
+		b[i]->Update(mouse_tracker, mouse);
 }
 
 void ChessApp::Render(float delta_time)
 {
-
 	device_context->OMSetBlendState(m_states->Opaque(), nullptr, 0xFFFFFFFF);
 	device_context->OMSetDepthStencilState(m_states->DepthNone(), 0);
 	device_context->RSSetState(m_states->CullNone());
-
 	m_effect->Apply(device_context);
-
 	device_context->IASetInputLayout(m_inputLayout);
 
-	DirectX::XMFLOAT4 colors[2] = { { 0.752941251f, 0.752941251f, 0.752941251f, 1.000000000f }, { 1.000000000f, 0.921568692f, 0.803921640f, 1.000000000f } };
+	DirectX::XMFLOAT4 colors[2] = { { 0.7529, 0.7529, 0.7529, 1 }, { 1, 0.9215, 0.8039, 1 } };
 	bool current_color = true;
 	DirectX::XMFLOAT3 v1(100.0f, 100.0f, 1.0f);
 	DirectX::XMFLOAT3 v2(160.0f, 100.0f, 1.0f);
 	DirectX::XMFLOAT3 v3(160.0, 160.0, 1.0f);
 	DirectX::XMFLOAT3 v4(100.0f, 160.0, 1.0f);
 
-	float f[4] = { 0,0,0,0.7f };
+	float f[4] = { 0.1,0.15,0.15,1.0f };
 	device_context->ClearRenderTargetView(render_target_view, f);
 
 	
@@ -94,7 +124,8 @@ void ChessApp::Render(float delta_time)
 	}
 	primitive_batch->End();
 	sprite_batch->Begin(DirectX::SpriteSortMode_FrontToBack);
-	b->Draw();
+	for (int i = 0; i < b.size(); i++)
+		b[i]->Draw();
 	sprite_batch->End();
 	swap_chain->Present(0, 0);
 	
