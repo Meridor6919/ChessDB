@@ -2,7 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by ChessDB.rc
 
-// Next default values for new objects
+// Next default values for new pieces
 // 
 
 #define RC_TOOLBAR 100

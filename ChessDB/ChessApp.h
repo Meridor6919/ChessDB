@@ -9,9 +9,9 @@
 #include "CommonStates.h"
 #include "Effects.h"
 #include <fstream>
-#include <map>
 #include "Piece_type.h"
-
+#include "Game.h"
+#include "map"
 class ChessApp : DirectXApplication
 {
 public:
@@ -31,10 +31,12 @@ private:
 	ID3D11InputLayout* m_inputLayout;
 	DirectX::SpriteFont* sprite_font;
 	Graphics::Sprite *a;
-	std::vector< Object*> b;
+	Game* game;
+	
 
 	void Update(float delta_time);
 	void Render(float delta_time);
 	void LoadStartingPosition();
+	void DrawGrid();
 };
 

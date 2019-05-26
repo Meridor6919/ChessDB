@@ -35,7 +35,6 @@ bool Object::Update(DirectX::Mouse::ButtonStateTracker * mouse_info, DirectX::Mo
 	}
 	return false;
 }
-
 void Object::Draw()
 {
 	sprite->Draw();
