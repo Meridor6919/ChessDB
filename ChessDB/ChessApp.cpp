@@ -120,7 +120,7 @@ void ChessApp::LoadStartingPosition()
 
 		line = "graphics\\" + (*piece_types.at(atoi(buffer[2].c_str()))).image_path;
 		a->AddTexture(std::wstring(line.begin(), line.end()).c_str(), device);
-		game->AddPiece(new Piece(new Object(a, !atoi(buffer[3].c_str())), piece_types.at(atoi(buffer[2].c_str())), atoi(buffer[3].c_str()), 8 - atoi(buffer[0].c_str()), atoi(buffer[1].c_str()) - 1));
+		game->AddPiece(new Piece(new Object(a, !atoi(buffer[3].c_str())), piece_types.at(atoi(buffer[2].c_str())), atoi(buffer[3].c_str())));
 
 		for (int j = 0; j < 4; j++)
 			buffer[j] = "";

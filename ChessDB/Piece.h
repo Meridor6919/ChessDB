@@ -10,13 +10,13 @@ struct Piece
 	int y;
 	bool white;
 
-	Piece(Object* object, Piece_type* piece_type, bool white, int x, int y)
+	Piece(Object* object, Piece_type* piece_type, bool white)
 	{
 		this->object = object;
 		this->piece_type = piece_type;
 		this->white = white;
-		this->x = x;
-		this->y = y;
+		this->x = object->GetX();
+		this->y = object->GetY();
 	}
 };
 

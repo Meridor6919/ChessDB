@@ -25,7 +25,8 @@ void Game::Update(DirectX::Mouse::ButtonStateTracker * mouse_info, DirectX::Mous
 {
 	for (int i = 0; i < pieces.size(); i++)
 	{
-		pieces[i]->object->Update(mouse_info, mouse);
+		if (pieces[i]->object->Update(mouse_info, mouse))
+			ValidateMove(i);
 	}
 }
 
@@ -34,6 +35,28 @@ void Game::Draw()
 	for (int i = 0; i < pieces.size(); i++)
 	{
 		pieces[i]->object->Draw();
+	}
+}
+
+void Game::ValidateMove(int id)
+{
+	int x = (pieces[id]->object->GetX() - (grid_rect.left - grid_rect.right / 2)) / 90;
+	int y = (pieces[id]->object->GetY() - (grid_rect.top - grid_rect.bottom / 2)) / 90;
+
+	if (x < 0 || y < 0 || x>= cells_in_row || y >= cells_in_column)
+	{
+		pieces[id]->object->SetX(pieces[id]->x);
+		pieces[id]->object->SetY(pieces[id]->y);
+	}
+	else
+	{
+		pieces[id]->object->SetX(grid_rect.left + x * grid_rect.right);
+
+		
+		pieces[id]->object->SetY(grid_rect.top + y * grid_rect.bottom);
+
+		pieces[id]->x = pieces[id]->object->GetX();
+		pieces[id]->y = pieces[id]->object->GetY();
 	}
 }
 

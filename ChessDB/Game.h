@@ -18,6 +18,7 @@ public:
 	void AddPiece(Piece* piece);
 	void Update(DirectX::Mouse::ButtonStateTracker* mouse_info, DirectX::Mouse * mouse);
 	void Draw();
+	void ValidateMove(int id);
 
 	RECT GetGridRect() { return grid_rect; }
 	int GetCellsInRow() { return cells_in_row; }
