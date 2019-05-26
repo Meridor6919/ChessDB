@@ -51,12 +51,20 @@ void Game::ValidateMove(int id)
 	else
 	{
 		pieces[id]->object->SetX(grid_rect.left + x * grid_rect.right);
-
-		
 		pieces[id]->object->SetY(grid_rect.top + y * grid_rect.bottom);
 
 		pieces[id]->x = pieces[id]->object->GetX();
 		pieces[id]->y = pieces[id]->object->GetY();
+		ChangePlayer();
+	}
+}
+
+void Game::ChangePlayer()
+{
+	turn++;
+	for (int i = 0; i < pieces.size(); i++)
+	{
+		pieces[i]->object->SetDragable(!pieces[i]->object->GetDragable());
 	}
 }
 

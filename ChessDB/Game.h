@@ -19,6 +19,7 @@ public:
 	void Update(DirectX::Mouse::ButtonStateTracker* mouse_info, DirectX::Mouse * mouse);
 	void Draw();
 	void ValidateMove(int id);
+	void ChangePlayer();
 
 	RECT GetGridRect() { return grid_rect; }
 	int GetCellsInRow() { return cells_in_row; }

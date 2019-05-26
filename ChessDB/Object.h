@@ -15,7 +15,9 @@ public:
 	void Draw();
 	int GetX() { return sprite->GetX(); }
 	int GetY() { return sprite->GetY(); }
+	bool GetDragable() { return dragable; }
 	void SetX(int x) { sprite->SetX(x); }
 	void SetY(int y) { sprite->SetY(y); }
+	void SetDragable(bool dragable) { this->dragable = dragable; }
 };
 
