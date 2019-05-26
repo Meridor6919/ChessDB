@@ -50,6 +50,26 @@ void Game::ValidateMove(int id)
 	}
 	else
 	{
+		for (int i = pieces.size() -1; i >= 0 ; i--)
+		{
+			if (pieces[i]->x == grid_rect.left + x * grid_rect.right && pieces[i]->y == grid_rect.top + y * grid_rect.bottom)
+			{
+				if (pieces[i]->white == pieces[id]->white)
+				{
+					pieces[id]->object->SetX(pieces[id]->x);
+					pieces[id]->object->SetY(pieces[id]->y);
+					return;
+				}
+				else
+				{
+					if (i < id)
+						id--;
+					pieces.erase(pieces.begin() + i);
+					break;
+				}
+			}
+		}
+
 		pieces[id]->object->SetX(grid_rect.left + x * grid_rect.right);
 		pieces[id]->object->SetY(grid_rect.top + y * grid_rect.bottom);
 
@@ -57,13 +77,6 @@ void Game::ValidateMove(int id)
 		{
 			pieces[id]->x = pieces[id]->object->GetX();
 			pieces[id]->y = pieces[id]->object->GetY();
-			for (int i = 0; i < pieces.size(); i++)
-			{
-				if (pieces[i]->x == pieces[id]->x && pieces[i]->y == pieces[id]->y && i != id)
-				{
-					pieces.erase(pieces.begin() + i);
-				}
-			}
 			ChangePlayer();
 		}
 	}
