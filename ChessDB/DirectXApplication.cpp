@@ -171,10 +171,10 @@ bool DirectXApplication::Init()
 		MessageBox(0, "window rect error", "Error", 0);
 		return false;
 	}
+	RECT dr;
+	GetWindowRect(GetDesktopWindow(), &dr);
 
-	GetWindowRect(GetDesktopWindow(), &wr);
-
-	hwnd = CreateWindowEx(NULL, "xd", title.c_str(), WS_OVERLAPPED | WS_SYSMENU | WS_MINIMIZEBOX, (wr.right - window_width) / 2, (wr.bottom - window_height) / 2, window_width, window_height, 0, 0, *instance, 0);
+	hwnd = CreateWindowEx(NULL, "xd", title.c_str(), WS_OVERLAPPED | WS_SYSMENU | WS_MINIMIZEBOX, (dr.right - window_width) / 2, (dr.bottom - window_height) / 2, wr.right - wr.left, wr.bottom - wr.top, 0, 0, *instance, 0);
 	if (!hwnd)
 	{
 		MessageBox(0, "handle error", "Error", 0);

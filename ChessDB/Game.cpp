@@ -4,14 +4,43 @@
 
 Game::Game()
 {
+	std::fstream fvar;
+	std::string line;
+	fvar.open("settings\\general.txt", std::ios::in);
 
+	for (int i = 0; std::getline(fvar, line); i++)
+	{
+		switch (i)
+		{
+			case 0:
+			{
+				grid_rect.left = atoi(line.c_str());
+			}
+			case 1:
+			{
+				grid_rect.top = atoi(line.c_str());
+			}
+			case 2:
+			{
+				grid_rect.right = atoi(line.c_str());
+			}
+			case 3:
+			{
+				grid_rect.bottom = atoi(line.c_str());
+			}
+			case 4:
+			{
+				cells_in_row = atoi(line.c_str());
+			}
+			case 5:
+			{
+				cells_in_column = atoi(line.c_str());
+			}
+		}
+	}
 	std::vector<Piece*> pieces;
-	grid_rect = { 80, 30, 90, 90 };
-	cells_in_row = 8;
-	cells_in_column = 8;
 	pieces;
 	this->pieces;
-
 }
 
 void Game::AddPiece(Piece * piece)

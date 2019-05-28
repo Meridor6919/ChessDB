@@ -2,6 +2,7 @@
 #include "Piece.h"
 #include <vector>
 #include <Windows.h>
+#include <fstream>
 
 class Game
 {
