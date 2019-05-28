@@ -10,6 +10,10 @@ class Object
 	Graphics::Sprite *sprite;
 
 public:
+
+	static double x_ratio;
+	static double y_ratio;
+
 	Object(Graphics::Sprite *sprite, bool dragable);
 	bool Update(DirectX::Mouse::ButtonStateTracker* mouse_info, DirectX::Mouse * mouse);
 	void Draw();

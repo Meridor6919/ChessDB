@@ -3,6 +3,9 @@
 
 ChessApp::ChessApp(HINSTANCE instance) : DirectXApplication(instance)
 {
+
+	Object::x_ratio = x_ratio;
+	Object::y_ratio = y_ratio;
 	m_states = new DirectX::CommonStates(device);
 	m_effect = new DirectX::BasicEffect(device);
 	m_effect->SetVertexColorEnabled(true);
@@ -28,7 +31,6 @@ ChessApp::ChessApp(HINSTANCE instance) : DirectXApplication(instance)
 	mouse->SetWindow(hwnd);
 	mouse_tracker = new DirectX::Mouse::ButtonStateTracker();
 	LoadStartingPosition();
-	
 }
 
 int ChessApp::Run()

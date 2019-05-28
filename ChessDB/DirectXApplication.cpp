@@ -174,6 +174,9 @@ bool DirectXApplication::Init()
 	RECT dr;
 	GetWindowRect(GetDesktopWindow(), &dr);
 
+	x_ratio = (double)(wr.right - wr.left/2) / window_width;
+	y_ratio = (double)(wr.bottom - wr.top/2) / window_height;
+
 	hwnd = CreateWindowEx(NULL, "xd", title.c_str(), WS_OVERLAPPED | WS_SYSMENU | WS_MINIMIZEBOX, (dr.right - window_width) / 2, (dr.bottom - window_height) / 2, wr.right - wr.left, wr.bottom - wr.top, 0, 0, *instance, 0);
 	if (!hwnd)
 	{

@@ -29,6 +29,8 @@ public:
 
 protected:
 
+	double y_ratio;
+	double x_ratio;
 	HWND hwnd;
 	HINSTANCE *instance;
 	UINT window_width;
