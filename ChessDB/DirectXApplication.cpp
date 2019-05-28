@@ -4,9 +4,9 @@ DirectXApplication::DirectXApplication(HINSTANCE instance)
 {
 	hwnd = 0;
 	this->instance = &instance;
-	window_width = 1000;
+	window_width = 1280;
 	window_height = 800;
-	title = "title xd";
+	title = "Chess DB";
 	window_style = WS_OVERLAPPED;
 
 	ZeroMemory(&wc, sizeof(WNDCLASSEX));
@@ -172,7 +172,9 @@ bool DirectXApplication::Init()
 		return false;
 	}
 
-	hwnd = CreateWindowEx(NULL, "xd", title.c_str(), WS_OVERLAPPED | WS_SYSMENU | WS_MINIMIZEBOX, 0, 0, wr.right - wr.left, wr.bottom - wr.top, 0, 0, *instance, 0);
+	GetWindowRect(GetDesktopWindow(), &wr);
+
+	hwnd = CreateWindowEx(NULL, "xd", title.c_str(), WS_OVERLAPPED | WS_SYSMENU | WS_MINIMIZEBOX, (wr.right - window_width) / 2, (wr.bottom - window_height) / 2, window_width, window_height, 0, 0, *instance, 0);
 	if (!hwnd)
 	{
 		MessageBox(0, "handle error", "Error", 0);
