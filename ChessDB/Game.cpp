@@ -69,45 +69,59 @@ void Game::Draw()
 
 void Game::ValidateMove(int id)
 {
-	int x = (pieces[id]->object->GetX() - (grid_rect.left - grid_rect.right / 2)) / 90;
-	int y = (pieces[id]->object->GetY() - (grid_rect.top - grid_rect.bottom / 2)) / 90;
+	int x = GetCellId_X(id);
+	int y = GetCellId_Y(id);
+	bool attacking = false;
+	int target;
 
-	if (x < 0 || y < 0 || x>= cells_in_row || y >= cells_in_column)
+	//if dragged outside grid
+	if (x < 0 || y < 0 || x >= cells_in_row || y >= cells_in_column)
 	{
 		pieces[id]->object->SetX(pieces[id]->x);
 		pieces[id]->object->SetY(pieces[id]->y);
+		return;
 	}
-	else
+
+	//checking if attack performed
+	for (int i = pieces.size() - 1; i >= 0; i--)
 	{
-		for (int i = pieces.size() -1; i >= 0 ; i--)
+		if (pieces[i]->x == grid_rect.left + x * grid_rect.right && pieces[i]->y == grid_rect.top + y * grid_rect.bottom)
 		{
-			if (pieces[i]->x == grid_rect.left + x * grid_rect.right && pieces[i]->y == grid_rect.top + y * grid_rect.bottom)
+			if (pieces[i]->white == pieces[id]->white)
 			{
-				if (pieces[i]->white == pieces[id]->white)
-				{
-					pieces[id]->object->SetX(pieces[id]->x);
-					pieces[id]->object->SetY(pieces[id]->y);
-					return;
-				}
-				else
-				{
-					if (i < id)
-						id--;
-					pieces.erase(pieces.begin() + i);
-					break;
-				}
+				pieces[id]->object->SetX(pieces[id]->x);
+				pieces[id]->object->SetY(pieces[id]->y);
+				return;
+			}
+			else
+			{
+				attacking = true;
+				target = i;
 			}
 		}
+	}
+	MovePiece(id);
+	if (attacking)
+	{
+		if (target < id)
+			id--;
+		pieces.erase(pieces.begin() + target);
+	}
+}
 
-		pieces[id]->object->SetX(grid_rect.left + x * grid_rect.right);
-		pieces[id]->object->SetY(grid_rect.top + y * grid_rect.bottom);
+void Game::MovePiece(int id)
+{
+	int x = GetCellId_X(id);
+	int y = GetCellId_Y(id);
 
-		if (pieces[id]->x != pieces[id]->object->GetX() || pieces[id]->y != pieces[id]->object->GetY())
-		{
-			pieces[id]->x = pieces[id]->object->GetX();
-			pieces[id]->y = pieces[id]->object->GetY();
-			ChangePlayer();
-		}
+	pieces[id]->object->SetX(grid_rect.left + x * grid_rect.right);
+	pieces[id]->object->SetY(grid_rect.top + y * grid_rect.bottom);
+
+	if (pieces[id]->x != pieces[id]->object->GetX() || pieces[id]->y != pieces[id]->object->GetY())
+	{
+		pieces[id]->x = pieces[id]->object->GetX();
+		pieces[id]->y = pieces[id]->object->GetY();
+		ChangePlayer();
 	}
 }
 
@@ -118,5 +132,15 @@ void Game::ChangePlayer()
 	{
 		pieces[i]->object->SetDragable(!pieces[i]->object->GetDragable());
 	}
+}
+
+int Game::GetCellId_X(int piece_id)
+{
+	return (pieces[piece_id]->object->GetX() - (grid_rect.left - grid_rect.right / 2)) / 90;
+}
+
+int Game::GetCellId_Y(int piece_id)
+{
+	return (pieces[piece_id]->object->GetY() - (grid_rect.top - grid_rect.bottom / 2)) / 90;
 }
 
