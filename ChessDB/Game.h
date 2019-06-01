@@ -3,6 +3,7 @@
 #include <vector>
 #include <Windows.h>
 #include <fstream>
+#include <tuple>
 
 class Game
 {
@@ -19,6 +20,7 @@ class Game
 	void ChangePlayer();
 	int GetCellId_X(int x);
 	int GetCellId_Y(int y);
+	std::tuple<bool, bool, bool, bool> GetRelativeDirection(int binary_direction, double rotation);
 
 public:
 

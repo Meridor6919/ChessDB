@@ -159,20 +159,7 @@ bool Game::ValidateMove(std::string move_formula, int piece_id)
 		if (distance == 0)
 			distance = INT_MAX;
 		bool n, e, w, s;
-		if (pieces[piece_id]->white)
-		{
-			w = direction - 8 >= 0;
-			s = direction - (8 * w) - 4 >= 0;
-			e = direction - (8 * w) - (4 * s) - 2 >= 0;
-			n = direction % 2 == 1;
-		}
-		else
-		{
-			e = direction - 8 >= 0;
-			n = direction - (8 * e) - 4 >= 0;
-			w = direction - (8 * e) - (4 * n) - 2 >= 0;
-			s = direction % 2 == 1;
-		}
+		std::tie(n, e, s, w) = GetRelativeDirection(direction, 180*!pieces[piece_id]->white);
 		if (move_formula[i + 4] == ';')
 		{
 			if ((bool)(x_shift*y_shift) == (bool)str_dgn)
@@ -215,5 +202,20 @@ int Game::GetCellId_X(int x)
 int Game::GetCellId_Y(int y)
 {
 	return (y - (grid_rect.top - grid_rect.bottom/ 2)) / 90;
+}
+
+std::tuple<bool, bool, bool, bool> Game::GetRelativeDirection(int binary_direction, double rotation)
+{
+	bool ret[4];
+
+	int add = ((int)rotation+45)/90;
+	add = abs(add);
+
+		ret[(3+add)%4] = binary_direction - 8 >= 0;
+		ret[(2 + add) % 4] = binary_direction - (8 * ret[(3 + add) % 4]) - 4 >= 0;
+		ret[(1 + add) % 4] = binary_direction - (8 * ret[(3 + add) % 4]) - (4 * ret[(2 + add) % 4]) - 2 >= 0;
+		ret[add % 4] = binary_direction % 2 == 1;
+
+	return std::tuple<bool, bool, bool, bool>(ret[0], ret[1], ret[2], ret[3]);
 }
 
