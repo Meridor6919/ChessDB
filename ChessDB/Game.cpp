@@ -55,7 +55,7 @@ void Game::Update(DirectX::Mouse::ButtonStateTracker * mouse_info, DirectX::Mous
 	for (int i = 0; i < pieces.size(); i++)
 	{
 		if (pieces[i]->object->Update(mouse_info, mouse))
-			ValidateMove(i);
+			OnMove(i);
 	}
 }
 
@@ -67,30 +67,23 @@ void Game::Draw()
 	}
 }
 
-void Game::ValidateMove(int id)
+void Game::OnMove(int piece_id)
 {
-	int x = GetCellId_X(id);
-	int y = GetCellId_Y(id);
+	int x = GetCellId_X(pieces[piece_id]->object->GetX());
+	int y = GetCellId_Y(pieces[piece_id]->object->GetY());
 	bool attacking = false;
 	int target;
-
-	//if dragged outside grid
-	if (x < 0 || y < 0 || x >= cells_in_row || y >= cells_in_column)
-	{
-		pieces[id]->object->SetX(pieces[id]->x);
-		pieces[id]->object->SetY(pieces[id]->y);
-		return;
-	}
+	std::string move_formula;
 
 	//checking if attack performed
 	for (int i = pieces.size() - 1; i >= 0; i--)
 	{
 		if (pieces[i]->x == grid_rect.left + x * grid_rect.right && pieces[i]->y == grid_rect.top + y * grid_rect.bottom)
 		{
-			if (pieces[i]->white == pieces[id]->white)
+			if (pieces[i]->white == pieces[piece_id]->white)
 			{
-				pieces[id]->object->SetX(pieces[id]->x);
-				pieces[id]->object->SetY(pieces[id]->y);
+				pieces[piece_id]->object->SetX(pieces[piece_id]->x);
+				pieces[piece_id]->object->SetY(pieces[piece_id]->y);
 				return;
 			}
 			else
@@ -100,29 +93,109 @@ void Game::ValidateMove(int id)
 			}
 		}
 	}
-	MovePiece(id);
 	if (attacking)
 	{
-		if (target < id)
-			id--;
-		pieces.erase(pieces.begin() + target);
+		move_formula = pieces[piece_id]->piece_type->attack_formula;
+	}
+	else
+	{
+		move_formula = pieces[piece_id]->piece_type->move_formula;
+	}
+
+	if (ValidateMove(move_formula, piece_id))
+	{
+		MovePiece(piece_id);
+		if (attacking)
+		{
+			if (target < piece_id)
+				piece_id--;
+			pieces.erase(pieces.begin() + target);
+		}
+	}
+	else
+	{
+		pieces[piece_id]->object->SetX(pieces[piece_id]->x);
+		pieces[piece_id]->object->SetY(pieces[piece_id]->y);
 	}
 }
 
-void Game::MovePiece(int id)
+void Game::MovePiece(int piece_id)
 {
-	int x = GetCellId_X(id);
-	int y = GetCellId_Y(id);
+	int x = GetCellId_X(pieces[piece_id]->object->GetX());
+	int y = GetCellId_Y(pieces[piece_id]->object->GetY());
 
-	pieces[id]->object->SetX(grid_rect.left + x * grid_rect.right);
-	pieces[id]->object->SetY(grid_rect.top + y * grid_rect.bottom);
+	pieces[piece_id]->object->SetX(grid_rect.left + x * grid_rect.right);
+	pieces[piece_id]->object->SetY(grid_rect.top + y * grid_rect.bottom);
 
-	if (pieces[id]->x != pieces[id]->object->GetX() || pieces[id]->y != pieces[id]->object->GetY())
+	pieces[piece_id]->x = pieces[piece_id]->object->GetX();
+	pieces[piece_id]->y = pieces[piece_id]->object->GetY();
+	ChangePlayer();
+}
+
+bool Game::ValidateMove(std::string move_formula, int piece_id)
+{
+	int dst_x = GetCellId_X(pieces[piece_id]->object->GetX());
+	int dst_y = GetCellId_Y(pieces[piece_id]->object->GetY());
+	int src_x = GetCellId_X(pieces[piece_id]->x);
+	int src_y = GetCellId_Y(pieces[piece_id]->y);
+	int x_shift = GetCellId_X(pieces[piece_id]->object->GetX()) - src_x;
+	int y_shift = GetCellId_Y(pieces[piece_id]->object->GetY()) - src_y;
+
+	bool ret = false;
+
+	if (dst_x == src_x && dst_y == src_y)
 	{
-		pieces[id]->x = pieces[id]->object->GetX();
-		pieces[id]->y = pieces[id]->object->GetY();
-		ChangePlayer();
+		return false;
 	}
+	else if(dst_x < 0 || dst_y < 0 || dst_x >= cells_in_row || dst_y >= cells_in_column)
+	{
+		return false;
+	}
+	for (int i = 0; i < move_formula.size(); i+=5)
+	{
+		bool str_dgn = atoi(((std::string)"" + move_formula[i]).c_str());
+		int direction = strtoul(((std::string)""+ move_formula[i+1]).c_str(),NULL, 16);
+		int distance = atoi(((std::string)"" + move_formula[i+2] + move_formula[i+3]).c_str());
+		if (distance == 0)
+			distance = INT_MAX;
+		bool n, e, w, s;
+		if (pieces[piece_id]->white)
+		{
+			w = direction - 8 >= 0;
+			s = direction - (8 * w) - 4 >= 0;
+			e = direction - (8 * w) - (4 * s) - 2 >= 0;
+			n = direction % 2 == 1;
+		}
+		else
+		{
+			e = direction - 8 >= 0;
+			n = direction - (8 * e) - 4 >= 0;
+			w = direction - (8 * e) - (4 * n) - 2 >= 0;
+			s = direction % 2 == 1;
+		}
+		if (move_formula[i + 4] == ';')
+		{
+			if ((bool)(x_shift*y_shift) == (bool)str_dgn)
+				continue;
+			else if (!str_dgn && abs(x_shift) != abs(y_shift))
+				continue;
+			else if (x_shift >= 0 && y_shift > 0 && !n)
+				continue;
+			else if (x_shift > 0 && y_shift <= 0 && !e)
+				continue;
+			else if (x_shift <= 0 && y_shift < 0 && !s)
+				continue;
+			else if (x_shift < 0 && y_shift >= 0 && !w)
+				continue;
+			else if (x_shift >= 0 && y_shift > 0 && !n)
+				continue;
+			else if (abs(x_shift - y_shift)*str_dgn+abs(x_shift)*!str_dgn > distance)
+				continue;
+			else
+				ret = true;
+		}
+	}
+	return ret;
 }
 
 void Game::ChangePlayer()
@@ -134,13 +207,13 @@ void Game::ChangePlayer()
 	}
 }
 
-int Game::GetCellId_X(int piece_id)
+int Game::GetCellId_X(int x)
 {
-	return (pieces[piece_id]->object->GetX() - (grid_rect.left - grid_rect.right / 2)) / 90;
+	return (x - (grid_rect.left - grid_rect.right/2)) / 90;
 }
 
-int Game::GetCellId_Y(int piece_id)
+int Game::GetCellId_Y(int y)
 {
-	return (pieces[piece_id]->object->GetY() - (grid_rect.top - grid_rect.bottom / 2)) / 90;
+	return (y - (grid_rect.top - grid_rect.bottom/ 2)) / 90;
 }
 

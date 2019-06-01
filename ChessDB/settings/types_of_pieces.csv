@@ -1,7 +1,7 @@
 id	name	move_formula	attack_formula	path	white_x	white_y	white_width	white_height	black_x	black_y	black_width	black_height
-1	pawn	1101;	0501;	figures.png	283.33	0	56.66	60	283.33	60	56.66	60
+1	pawn	1101;	0901;	figures.png	283.33	0	56.66	60	283.33	60	56.66	60
 2	bishop	0F00;	0F00;	figures.png	113.33	0	56.66	60	113.33	60	56.66	60
-3	knight	1F02&1501;	1F02&1501;	figures.png	56.66	0	56.66	60	56.66	60	56.66	60
+3	knight	1F02:1501;	1F02:1501;	figures.png	56.66	0	56.66	60	56.66	60	56.66	60
 4	rook	1F00;	1F00;	figures.png	0	0	56.66	60	0	60	56.66	60
-5	queen	1F00|0F00;	1F00|0F00;	figures.png	170	0	56.66	60	170	60	56.66	60
-6	king	1F01|0F01;	1F01|0F01;	figures.png	226.66	0	56.66	60	226.66	60	56.66	60
+5	queen	1F00;0F00;	1F00;0F00;	figures.png	170	0	56.66	60	170	60	56.66	60
+6	king	1F01;0F01;	1F01;0F01;	figures.png	226.66	0	56.66	60	226.66	60	56.66	60
