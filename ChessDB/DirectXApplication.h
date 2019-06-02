@@ -26,6 +26,7 @@ public:
 	virtual bool Init();
 	virtual bool InitD3D11();
 	static LRESULT CALLBACK DefaultMsgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+	static bool reset;
 
 protected:
 

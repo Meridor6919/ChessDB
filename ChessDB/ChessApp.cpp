@@ -40,6 +40,13 @@ int ChessApp::Run()
 
 void ChessApp::Update(float delta_time)
 {
+	if (reset)
+	{
+		reset = false;
+		delete game;
+		game = new Game();
+		LoadStartingPosition();
+	}
 	mouse_tracker->Update(mouse->GetState());
 	game->Update(mouse_tracker, mouse);
 }
