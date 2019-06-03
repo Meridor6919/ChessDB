@@ -17,6 +17,7 @@ class Game
 	void OnMove(int piece_id);
 	void MovePiece(int piece_id);
 	bool ValidateMove(std::string move_formula, int piece_id);
+	bool CollisionDetected(int src_x, int src_y, int dst_x, int dst_y);
 	void ChangePlayer();
 	int GetCellId_X(int x);
 	int GetCellId_Y(int y);

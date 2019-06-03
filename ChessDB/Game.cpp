@@ -38,24 +38,26 @@ Game::Game()
 			}
 		}
 	}
-	std::vector<Piece*> pieces;
-	pieces;
-	this->pieces;
+	for (int i = 0; i < cells_in_column * cells_in_row; i++)
+	{
+		pieces.push_back(nullptr);
+	}
 }
 
 void Game::AddPiece(Piece * piece)
 {
-	
-	pieces.push_back(piece);
+	pieces[GetCellId_X(piece->x)+ GetCellId_Y(piece->y)*cells_in_row] = piece;
 }
-
 
 void Game::Update(DirectX::Mouse::ButtonStateTracker * mouse_info, DirectX::Mouse * mouse)
 {
 	for (int i = 0; i < pieces.size(); i++)
 	{
-		if (pieces[i]->object->Update(mouse_info, mouse))
-			OnMove(i);
+		if (pieces[i] != nullptr)
+		{
+			if (pieces[i]->object->Update(mouse_info, mouse))
+				OnMove(i);
+		}
 	}
 }
 
@@ -63,7 +65,10 @@ void Game::Draw()
 {
 	for (int i = 0; i < pieces.size(); i++)
 	{
-		pieces[i]->object->Draw();
+		if (pieces[i] != nullptr)
+		{
+			pieces[i]->object->Draw();
+		}
 	}
 }
 
@@ -78,18 +83,21 @@ void Game::OnMove(int piece_id)
 	//checking if attack performed
 	for (int i = pieces.size() - 1; i >= 0; i--)
 	{
-		if (pieces[i]->x == grid_rect.left + x * grid_rect.right && pieces[i]->y == grid_rect.top + y * grid_rect.bottom)
+		if (pieces[i] != nullptr)
 		{
-			if (pieces[i]->white == pieces[piece_id]->white)
+			if (pieces[i]->x == grid_rect.left + x * grid_rect.right && pieces[i]->y == grid_rect.top + y * grid_rect.bottom)
 			{
-				pieces[piece_id]->object->SetX(pieces[piece_id]->x);
-				pieces[piece_id]->object->SetY(pieces[piece_id]->y);
-				return;
-			}
-			else
-			{
-				attacking = true;
-				target = i;
+				if (pieces[i]->white == pieces[piece_id]->white)
+				{
+					pieces[piece_id]->object->SetX(pieces[piece_id]->x);
+					pieces[piece_id]->object->SetY(pieces[piece_id]->y);
+					return;
+				}
+				else
+				{
+					attacking = true;
+					target = i;
+				}
 			}
 		}
 	}
@@ -105,12 +113,6 @@ void Game::OnMove(int piece_id)
 	if (ValidateMove(move_formula, piece_id))
 	{
 		MovePiece(piece_id);
-		if (attacking)
-		{
-			if (target < piece_id)
-				piece_id--;
-			pieces.erase(pieces.begin() + target);
-		}
 	}
 	else
 	{
@@ -121,6 +123,7 @@ void Game::OnMove(int piece_id)
 
 void Game::MovePiece(int piece_id)
 {
+
 	int x = GetCellId_X(pieces[piece_id]->object->GetX());
 	int y = GetCellId_Y(pieces[piece_id]->object->GetY());
 
@@ -129,6 +132,10 @@ void Game::MovePiece(int piece_id)
 
 	pieces[piece_id]->x = pieces[piece_id]->object->GetX();
 	pieces[piece_id]->y = pieces[piece_id]->object->GetY();
+
+	pieces[x + y * cells_in_row] = pieces[piece_id];
+	pieces[piece_id] = nullptr;
+
 	ChangePlayer();
 }
 
@@ -138,8 +145,8 @@ bool Game::ValidateMove(std::string move_formula, int piece_id)
 	int dst_y = GetCellId_Y(pieces[piece_id]->object->GetY());
 	int src_x = GetCellId_X(pieces[piece_id]->x);
 	int src_y = GetCellId_Y(pieces[piece_id]->y);
-	int x_shift = GetCellId_X(pieces[piece_id]->object->GetX()) - src_x;
-	int y_shift = GetCellId_Y(pieces[piece_id]->object->GetY()) - src_y;
+	int x_shift = dst_x - src_x;
+	int y_shift = dst_y - src_y;
 
 	bool ret = false;
 
@@ -179,18 +186,49 @@ bool Game::ValidateMove(std::string move_formula, int piece_id)
 			else if (abs(x_shift - y_shift)*str_dgn+abs(x_shift)*!str_dgn > distance)
 				continue;
 			else
-				ret = true;
+			{
+				if(!CollisionDetected(src_x, src_y, dst_x ,dst_y))
+					ret = true;
+			}
+				
 		}
 	}
 	return ret;
 }
+
+bool Game::CollisionDetected(int src_x, int src_y, int dst_x, int dst_y)
+{
+	bool str_dgn = true;
+	int x_shift = dst_x - src_x;
+	int y_shift = dst_y - src_y;
+	if (abs(x_shift) == abs(y_shift))
+		str_dgn = false;
+
+	int distance = abs(x_shift - y_shift)*str_dgn + abs(x_shift) * !str_dgn;
+
+	
+
+	for (int i = 0; i < distance -1; i++)
+	{
+		x_shift = x_shift + 1*(x_shift != 0) -2*(x_shift > 0);
+		y_shift = y_shift + 1 * (y_shift != 0) - 2 * (y_shift > 0);
+		auto u = pieces[src_x + x_shift + (src_y + y_shift)*cells_in_row];
+		if (pieces[src_x + x_shift + (src_y + y_shift)*cells_in_row] != nullptr)
+			return true;
+	}
+	return false;
+}
+
 
 void Game::ChangePlayer()
 {
 	turn++;
 	for (int i = 0; i < pieces.size(); i++)
 	{
-		pieces[i]->object->SetDragable(!pieces[i]->object->GetDragable());
+		if (pieces[i] != nullptr)
+		{
+			pieces[i]->object->SetDragable(!pieces[i]->object->GetDragable());
+		}
 	}
 }
 
