@@ -69,7 +69,7 @@ void ChessApp::LoadStartingPosition()
 	std::fstream fvar;
 	std::map<int, Piece_type*> piece_types;
 	std::string line;
-	std::string buffer[13];
+	std::string buffer[14];
 	int index = 0;
 	fvar.open("settings\\types_of_pieces.csv", std::ios::in);
 	std::getline(fvar, line);
@@ -87,9 +87,9 @@ void ChessApp::LoadStartingPosition()
 				buffer[index] += line[j];
 		}
 
-		piece_types.insert(std::make_pair(atoi(buffer[0].c_str()), new Piece_type(atoi(buffer[0].c_str()), buffer[2], buffer[3], buffer[4],
-			{ atoi(buffer[5].c_str()),atoi(buffer[6].c_str()),atoi(buffer[7].c_str()),atoi(buffer[8].c_str()) },
-			{ atoi(buffer[9].c_str()),atoi(buffer[10].c_str()),atoi(buffer[11].c_str()),atoi(buffer[12].c_str()) })));
+		piece_types.insert(std::make_pair(atoi(buffer[0].c_str()), new Piece_type(atoi(buffer[0].c_str()), buffer[2], buffer[3], buffer[5], buffer[4],
+			{ atoi(buffer[6].c_str()),atoi(buffer[7].c_str()),atoi(buffer[8].c_str()),atoi(buffer[9].c_str()) },
+			{ atoi(buffer[10].c_str()),atoi(buffer[11].c_str()),atoi(buffer[12].c_str()),atoi(buffer[13].c_str()) })));
 		for (int j = 0; j < 13; j++)
 			buffer[j] = "";
 		index = 0;
