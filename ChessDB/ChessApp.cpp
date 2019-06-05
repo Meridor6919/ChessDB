@@ -81,7 +81,7 @@ void ChessApp::LoadStartingPosition()
 		{
 			if (line[j] == '\t')
 				index++;
-			else if (index >= 13)
+			else if (index >= 14)
 				break;
 			else
 				buffer[index] += line[j];
@@ -90,7 +90,7 @@ void ChessApp::LoadStartingPosition()
 		piece_types.insert(std::make_pair(atoi(buffer[0].c_str()), new Piece_type(atoi(buffer[0].c_str()), buffer[2], buffer[3], buffer[5], buffer[4],
 			{ atoi(buffer[6].c_str()),atoi(buffer[7].c_str()),atoi(buffer[8].c_str()),atoi(buffer[9].c_str()) },
 			{ atoi(buffer[10].c_str()),atoi(buffer[11].c_str()),atoi(buffer[12].c_str()),atoi(buffer[13].c_str()) })));
-		for (int j = 0; j < 13; j++)
+		for (int j = 0; j < 14; j++)
 			buffer[j] = "";
 		index = 0;
 	}
