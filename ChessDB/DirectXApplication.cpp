@@ -58,10 +58,8 @@ int DirectXApplication::Run()
 	}
 	return static_cast<int>(msg.wParam);
 }
-bool DirectXApplication::reset = false;
 LRESULT CALLBACK DirectXApplication::DefaultMsgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
-
 	switch (msg)
 	{
 	case WM_COMMAND:
@@ -74,7 +72,6 @@ LRESULT CALLBACK DirectXApplication::DefaultMsgProc(HWND hwnd, UINT msg, WPARAM 
 		{
 			
 			MessageBox(0, "RC_NEWGAME_PLAYER", "", 0);
-			reset = true;
 			break;
 		}
 		case RC_NEWGAME_AI:

@@ -1,7 +1,7 @@
 #include "Object.h"
 #include <string>
 
-Object::Object(Graphics::Sprite * sprite, bool dragable)
+Object::Object(MeridorGraphics::Sprite * sprite, bool dragable)
 {
 	draging = false;
 	this->dragable = dragable;

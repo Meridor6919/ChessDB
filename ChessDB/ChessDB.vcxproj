@@ -115,9 +115,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ChessApp.h" />
     <ClInclude Include="DirectXApplication.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameApp.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="Piece_type.h" />
@@ -125,14 +125,15 @@
     <ClInclude Include="Sprite.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ChessApp.cpp" />
     <ClCompile Include="DirectXApplication.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="myfile.spritefont" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
