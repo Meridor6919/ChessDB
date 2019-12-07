@@ -46,11 +46,11 @@ void Game::LoadConfigFile()
 void Game::LoadPieces(DirectX::SpriteBatch * sprite_batch, ID3D11Device * device)
 {
 	std::fstream fvar;
-	std::map<int, Piece_type*> piece_types;
+	std::map<int, std::shared_ptr<Piece_type>> piece_types;
 	std::string line;
 	std::string buffer[14];
 	int index = 0;
-	RECT rect;
+	RECT temp_rect, temp_rect2;
 	fvar.open("settings\\types_of_pieces.csv", std::ios::in);
 	std::getline(fvar, line);
 
@@ -72,10 +72,10 @@ void Game::LoadPieces(DirectX::SpriteBatch * sprite_batch, ID3D11Device * device
 				buffer[index] += line[j];
 			}
 		}
-
-		piece_types.insert(std::make_pair(atoi(buffer[0].c_str()), new Piece_type(atoi(buffer[0].c_str()), buffer[2], buffer[3], buffer[5], buffer[4],
-			{ atoi(buffer[6].c_str()),atoi(buffer[7].c_str()),atoi(buffer[8].c_str()),atoi(buffer[9].c_str()) },
-			{ atoi(buffer[10].c_str()),atoi(buffer[11].c_str()),atoi(buffer[12].c_str()),atoi(buffer[13].c_str()) })));
+		temp_rect = { atoi(buffer[6].c_str()),atoi(buffer[7].c_str()),atoi(buffer[8].c_str()),atoi(buffer[9].c_str()) };
+		temp_rect2 = { atoi(buffer[10].c_str()),atoi(buffer[11].c_str()),atoi(buffer[12].c_str()),atoi(buffer[13].c_str()) };
+		piece_types.insert(std::make_pair(atoi(buffer[0].c_str()), std::make_shared<Piece_type>(atoi(buffer[0].c_str()), buffer[2], buffer[3], buffer[5], buffer[4],
+		temp_rect, temp_rect2)));
 		for (int j = 0; j < 14; ++j)
 		{
 			buffer[j] = "";
@@ -107,21 +107,21 @@ void Game::LoadPieces(DirectX::SpriteBatch * sprite_batch, ID3D11Device * device
 		}
 		if (atoi(buffer[3].c_str()))
 		{
-			rect = (*piece_types.at(atoi(buffer[2].c_str()))).white;
+			temp_rect = (*piece_types.at(atoi(buffer[2].c_str()))).white;
 		}
 		else
 		{
-			rect = (*piece_types.at(atoi(buffer[2].c_str()))).black;
+			temp_rect = (*piece_types.at(atoi(buffer[2].c_str()))).black;
 		}
-		RECT temp = { rect.left,rect.top,rect.left + rect.right,rect.top + rect.bottom };
-		sprites.push_back(std::make_unique<MeridorGraphics::Sprite>(sprite_batch, temp,
+		RECT temp_rect2 = { temp_rect.left,temp_rect.top,temp_rect.left + temp_rect.right,temp_rect.top + temp_rect.bottom };
+		sprites.push_back(std::make_shared<MeridorGraphics::Sprite>(sprite_batch, temp_rect2,
 			grid_rect.left + (cells_in_row - atoi(buffer[0].c_str())) * grid_rect.right,
 			grid_rect.top + (atoi(buffer[1].c_str()) - 1) *  grid_rect.bottom, grid_rect.right,
 			grid_rect.bottom, 0.1));
 
 		line = "graphics\\" + (*piece_types.at(atoi(buffer[2].c_str()))).image_path;
 		sprites[static_cast<int>(sprites.size())-1]->AddTexture(std::wstring(line.begin(), line.end()).c_str(), device);
-		std::unique_ptr<Piece> piece = std::make_unique<Piece>(new Object(sprites[static_cast<int>(sprites.size()) - 1].get(), !atoi(buffer[3].c_str())), piece_types.at(atoi(buffer[2].c_str())), atoi(buffer[3].c_str()));
+		std::unique_ptr<Piece> piece = std::make_unique<Piece>(std::make_shared<Object>(sprites[static_cast<int>(sprites.size()) - 1], !atoi(buffer[3].c_str())), piece_types.at(atoi(buffer[2].c_str())), atoi(buffer[3].c_str()));
 		pieces[GetCellId_X(piece->x) + GetCellId_Y(piece->y)*cells_in_row].swap(piece);
 		for (int j = 0; j < 4; ++j)
 		{

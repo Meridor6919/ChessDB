@@ -4,13 +4,13 @@
 
 struct Piece
 {
-	Object* object;
-	Piece_type *piece_type;
+	std::shared_ptr<Object> object;
+	std::shared_ptr <Piece_type> piece_type;
 	int x;
 	int y;
 	bool white;
 
-	Piece(Object* object, Piece_type* piece_type, bool white)
+	Piece(std::shared_ptr<Object> object, std::shared_ptr <Piece_type> piece_type, bool white)
 	{
 		this->object = object;
 		this->piece_type = piece_type;

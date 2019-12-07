@@ -11,7 +11,7 @@
 class Game
 {
 	std::vector<std::unique_ptr<Piece>> pieces;
-	std::vector<std::unique_ptr<MeridorGraphics::Sprite>> sprites;
+	std::vector<std::shared_ptr<MeridorGraphics::Sprite>> sprites;
 	RECT grid_rect;
 	int cells_in_row;
 	int cells_in_column;

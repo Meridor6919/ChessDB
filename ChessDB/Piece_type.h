@@ -29,7 +29,6 @@ struct Piece_type
 		promotion = specials_int - (8 * immortal) - 4 >= 0;
 		double_move = specials_int - (8 * immortal) - (promotion) - 2 >= 0;
 		essential = specials_int % 2 == 1;
-		
 	}
 };
 
